@@ -7,9 +7,13 @@ app = Flask(__name__)
 def get_cookies():
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
+        context = browser.new_context()
+        page = context.new_page()
         page.goto("https://www.sas.no", timeout=60000)
         page.wait_for_timeout(7000)
-        cookies = page.context.cookies()
+        cookies = context.cookies()
         browser.close()
-    return jsonify({cookie['name']: cookie['value'] for cookie in cookies})
+        return jsonify({cookie["name"]: cookie["value"] for cookie in cookies})
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8000)
