@@ -7,11 +7,11 @@ def get_reese_cookie():
         browser = p.chromium.launch(headless=True)
         context = browser.new_context(
             user_agent='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36',
-            viewport_size={'width': 1280, 'height': 800}
+            viewport={'width': 1280, 'height': 800}  # ✅ this is the correct key
         )
         page = context.new_page()
 
-        # Set realistic browser headers
+        # Set additional headers
         page.set_extra_http_headers({
             'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
             'accept-language': 'en-US,en;q=0.9',
@@ -24,7 +24,7 @@ def get_reese_cookie():
 
         try:
             page.goto("https://www.sas.no", wait_until="load", timeout=60000)
-            time.sleep(10)  # Let JS execute
+            time.sleep(10)
             page.mouse.wheel(0, 500)
             time.sleep(1)
 
@@ -38,7 +38,7 @@ def get_reese_cookie():
                 print("❌ No reese84 cookie found.")
 
         except Exception as e:
-            print(f"🚨 Error occurred: {e}")
+            print(f"🚨 Error: {e}")
 
         finally:
             browser.close()
