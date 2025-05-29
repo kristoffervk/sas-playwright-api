@@ -5,7 +5,7 @@ import time
 app = Flask(__name__)
 
 @app.route("/")
-def get_cookie():
+def get_all_cookies():
     try:
         with sync_playwright() as p:
             browser = p.chromium.launch(headless=True)
@@ -32,13 +32,9 @@ def get_cookie():
             page.mouse.wheel(0, 500)
             time.sleep(1)
 
-            # Get cookies
+            # Return all cookies
             cookies = context.cookies()
-            for cookie in cookies:
-                if 'reese84' in cookie['name']:
-                    return jsonify(cookie)
-
-            return jsonify({"error": "reese84 cookie not found"})
+            return jsonify({"cookies": cookies})
 
     except Exception as e:
         return jsonify({"error": str(e)})
